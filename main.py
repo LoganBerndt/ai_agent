@@ -23,11 +23,11 @@ def main():
     args = parser.parse_args()
 
     messages = [
-            {
-                "role": "user",
-                "content": args.user_prompt,
-            }
-        ]
+        {
+            "role": "user",
+            "content": args.user_prompt,
+        }
+    ]
 
     response = client.chat.completions.create(
         model="openrouter/free",
@@ -48,5 +48,5 @@ def main():
 
 
 
-
-main()
+if __name__ == "__main__":
+    main()
