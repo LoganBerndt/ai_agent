@@ -10,16 +10,16 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
         if not valid_file_path:
             return f'Error: Cannot write to "{file_path}" as it is outside the permitted working directory'   
 
-        if os.path.isdir(file_path):
-            f'Error: Cannot write to "{file_path}" as it is a directory'
+        if os.path.isdir(target_path):
+            return f'Error: Cannot write to "{file_path}" as it is a directory'
 
-        if not os.path.isfile(target_path):
-            return f'Error: File not found or is not a regular file: "{file_path}"'
+        directory = os.path.dirname(target_path)
+        os.makedirs(directory, exist_ok=True)
+        
+        with open(target_path, "w", encoding="utf-8") as file:
+            file.write(content)
+            
+        return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
 
-        f'Error: Cannot write to "{file_path}" as it is a directory'
-
-        with open(f"{target_path}", "r", encoding="utf-8") as file:
-            content = file.read(READ_LIMIT)
-            if file.read(1):
-                content += f'[...File "{file_path}" truncated at {READ_LIMIT} characters]'
-            return content
+    except Exception as e:
+        return f"Error: {e}"
