@@ -3,6 +3,9 @@ import argparse
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts import system_prompt
+from call_function import available_functions
+
+
 
 def main():
 
@@ -37,11 +40,11 @@ def main():
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
-        temperature=0,
-    )
+        tools=available_functions,
+    )  
+
 
     check_usage = response.usage
-
     
     if args.verbose == True:
         prompt_tokens = response.usage.prompt_tokens
@@ -49,8 +52,16 @@ def main():
         print(f"Prompt tokens: {prompt_tokens}")
         print(f"Response tokens: {completion_tokens}")
         print(f"User prompt: {args.user_prompt}")
-        
-    print(response.choices[0].message.content)
+
+
+    message = response.choices[0].message
+
+    if message.tool_calls:
+        for tool_call in message.tool_calls:
+            function_args = json.loads(tool_call.function.arguments or "{}")
+            print(f"Calling function: {tool_call.function.name}({function_args})")
+    else:
+        print(message.content)
 
 
 
