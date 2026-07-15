@@ -38,36 +38,43 @@ def main():
         }
     ]
 
-    response = client.chat.completions.create(
-        model="openrouter/free",
-        messages=messages,
-        tools=available_functions,
-    )  
+    for task in range(20):
+
+        response = client.chat.completions.create(
+            model="openrouter/free",
+            messages=messages,
+            tools=available_functions,
+        )  
 
 
-    check_usage = response.usage
-    
-    if args.verbose == True:
-        prompt_tokens = response.usage.prompt_tokens
-        completion_tokens = response.usage.completion_tokens
-        print(f"Prompt tokens: {prompt_tokens}")
-        print(f"Response tokens: {completion_tokens}")
-        print(f"User prompt: {args.user_prompt}")
+        check_usage = response.usage
+        
+        if args.verbose == True:
+            prompt_tokens = response.usage.prompt_tokens
+            completion_tokens = response.usage.completion_tokens
+            print(f"Prompt tokens: {prompt_tokens}")
+            print(f"Response tokens: {completion_tokens}")
+            print(f"User prompt: {args.user_prompt}")
+            
+        message = response.choices[0].message
+        messages.append(message)
 
+        if message.tool_calls:
+            for tool_call in message.tool_calls:
+                result_message = call_function(tool_call, args.verbose)
+                messages.append(result_message)
 
-    message = response.choices[0].message
+                if len(result_message['content']) == 0:
+                    raise Exception("Content is empty")
+                if args.verbose:
+                    print(f"-> {result_message['content']}")
+        else:
+            print(message.content)
+            break
+    else:    
+        print("Error: Maximum iteration range reached. Terminating process.")
+        exit(1)
 
-
-    if message.tool_calls:
-        for tool_call in message.tool_calls:
-            result_message = call_function(tool_call, args.verbose)
-
-            if len(result_message['content']) == 0:
-                raise Exception("Content is empty")
-            if args.verbose:
-                print(f"-> {result_message['content']}")
-    else:
-        print(message.content)
 
 
 
