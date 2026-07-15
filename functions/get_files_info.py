@@ -1,5 +1,6 @@
 import os
 
+# get_files_info.py - This function lists files in a specified directory relative to the working directory.
 def get_files_info(working_directory: str, directory: str = ".") -> str:
 
     try:

@@ -7,7 +7,9 @@ from prompts import system_prompt
 from call_function import call_function, available_functions
 
 
-
+# Main function - This is the entry point of the application. It initializes the OpenAI client, sets up the command-line argument parser, 
+# and manages the interaction loop with the AI agent. The loop continues until a response is received without any tool calls or until a 
+# maximum number of iterations is reached. The function also handles verbose output for debugging purposes.
 def main():
 
     load_dotenv()

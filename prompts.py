@@ -1,3 +1,5 @@
+
+# prompts.py - This file contains the system prompt that is used to instruct the AI agent on how to behave and what operations it can perform. 
 system_prompt = """
 You are a helpful AI coding agent.
 

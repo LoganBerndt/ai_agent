@@ -1,7 +1,7 @@
 import os
 from config import READ_LIMIT
 
-
+# get_file_content.py - This function reads the content of a specified file relative to the working directory.
 def get_file_content(working_directory: str, file_path: str) -> str:
 
     try:

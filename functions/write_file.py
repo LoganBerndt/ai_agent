@@ -1,5 +1,6 @@
 import os
 
+# write_file.py - This function writes content to a specified file relative to the working directory. 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
 
     try:
